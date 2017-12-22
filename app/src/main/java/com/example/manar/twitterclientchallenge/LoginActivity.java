@@ -65,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.onActivityResult(requestCode, resultCode, data);
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
