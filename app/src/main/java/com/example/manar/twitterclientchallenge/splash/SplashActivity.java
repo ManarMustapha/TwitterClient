@@ -13,15 +13,16 @@ import com.example.manar.twitterclientchallenge.view.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
+    int secondsDelayed = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        int secondsDelayed = 1;
         final User user = UserHelper.getUser(getApplicationContext());
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                if (user == null) {
+                if (user.getUsername().equals("")) {
                     startActivity(new Intent(SplashActivity.this, LoginActivity.class));
                 } else {
                     startActivity(new Intent(SplashActivity.this, HomeActivity.class));

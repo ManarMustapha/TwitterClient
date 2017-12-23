@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         User user = new User(username ,secret , token ,session.getUserId());
         UserHelper.saveUser(getApplicationContext() ,user);
         Intent intent = new Intent(this, HomeActivity.class);
-        intent.putExtra(Constants.USERNAME, username);
+        intent.putExtra("username", username);
         startActivity(intent);
         finish();
     }
