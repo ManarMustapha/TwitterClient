@@ -1,4 +1,4 @@
-package com.example.manar.twitterclientchallenge.Application;
+package com.example.manar.twitterclientchallenge.application;
 
 import android.app.Application;
 import android.util.Log;

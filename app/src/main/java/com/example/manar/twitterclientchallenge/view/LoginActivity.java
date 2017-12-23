@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.manar.twitterclientchallenge.R;
+import com.example.manar.twitterclientchallenge.model.User;
 import com.example.manar.twitterclientchallenge.util.Constants;
+import com.example.manar.twitterclientchallenge.util.UserHelper;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthToken;
@@ -31,7 +33,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void success(Result<TwitterSession> result) {
                 // Do something with result, which provides a TwitterSession for making API calls
-                Log.v(TAG, result.toString());
                 TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
                 login(session);
             }
@@ -49,15 +50,11 @@ public class LoginActivity extends AppCompatActivity {
         TwitterAuthToken authToken = session.getAuthToken();
         String token = authToken.token;
         String secret = authToken.secret;
-        SharedPreferences.Editor editor = getSharedPreferences(Constants.LOGIN, MODE_PRIVATE).edit();
-        editor.putString(Constants.USERNAME, session.getUserName());
-        editor.putLong("userId", session.getUserId());
-        editor.putString("token", token);
-        editor.putString("secret", secret);
-        editor.apply();
         String username = session.getUserName();
+        User user = new User(username ,secret , token ,session.getUserId());
+        UserHelper.saveUser(getApplicationContext() ,user);
         Intent intent = new Intent(this, HomeActivity.class);
-        intent.putExtra("username", username);
+        intent.putExtra(Constants.USERNAME, username);
         startActivity(intent);
         finish();
     }
