@@ -29,12 +29,12 @@ public class HomeActivity extends AppCompatActivity {
                 .enqueue(new Callback<FollowersResponse>() {
             @Override
             public void onResponse(Call<FollowersResponse> call, Response<FollowersResponse> response) {
-                Log.e("onResponse",response.body().getResults().size()+"");
+
             }
 
             @Override
             public void onFailure(Call<FollowersResponse> call, Throwable t) {
-                Log.e("onFailure",t.toString());
+
             }
 
         });
