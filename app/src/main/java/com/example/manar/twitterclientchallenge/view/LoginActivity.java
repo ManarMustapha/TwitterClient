@@ -1,4 +1,4 @@
-package com.example.manar.twitterclientchallenge;
+package com.example.manar.twitterclientchallenge.view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +7,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.manar.twitterclientchallenge.R;
+import com.example.manar.twitterclientchallenge.util.Constants;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthToken;
@@ -48,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         String token = authToken.token;
         String secret = authToken.secret;
         SharedPreferences.Editor editor = getSharedPreferences(Constants.LOGIN, MODE_PRIVATE).edit();
-        editor.putString("username", session.getUserName());
+        editor.putString(Constants.USERNAME, session.getUserName());
         editor.putLong("userId", session.getUserId());
         editor.putString("token", token);
         editor.putString("secret", secret);
@@ -57,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, HomeActivity.class);
         intent.putExtra("username", username);
         startActivity(intent);
+        finish();
     }
 
     @Override
