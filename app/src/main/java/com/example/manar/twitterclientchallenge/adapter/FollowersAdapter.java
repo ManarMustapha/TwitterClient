@@ -7,7 +7,8 @@ import android.view.ViewGroup;
 
 import com.example.manar.twitterclientchallenge.R;
 import com.example.manar.twitterclientchallenge.databinding.FollowersItemBinding;
-import com.example.manar.twitterclientchallenge.model.FollowersResponse;
+import com.example.manar.twitterclientchallenge.model.Followers;
+import com.example.manar.twitterclientchallenge.model.UserLookUp;
 import com.example.manar.twitterclientchallenge.viewmodel.FollowersInfo;
 
 import java.util.List;
@@ -18,9 +19,9 @@ import java.util.List;
 
 public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.FollowersViewHolder> {
 
-    private List<FollowersResponse> followersResponseList;
+    private List<UserLookUp> followersResponseList;
 
-    public FollowersAdapter(List<FollowersResponse> followersResponseList) {
+    public FollowersAdapter(List<UserLookUp> followersResponseList) {
         this.followersResponseList = followersResponseList;
     }
 

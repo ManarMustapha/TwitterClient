@@ -10,12 +10,35 @@
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/follower_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:circleImageUrl="@{followers.followerImage}"/>
+            android:circleImageUrl="@{followers.followerImage}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{followers.followerName}"
+            android:textColor="@color/textColor"
+            style="@style/Base.TextAppearance.AppCompat.Large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/follower_image"
+            app:layout_constraintTop_toTopOf="@id/follower_image" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{followers.followerBio}"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/follower_image" />
     </android.support.constraint.ConstraintLayout>
 </layout>
