@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,8 +37,19 @@ public class TweetsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activityTweetsBinding = DataBindingUtil.setContentView(this , R.layout.activity_tweets);
 
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         activityTweetsBinding.tweetRv.setHasFixedSize(true);
-        activityTweetsBinding.tweetRv.setLayoutManager(new LinearLayoutManager(getApplicationContext() , LinearLayoutManager.VERTICAL,false));
+        LinearLayoutManager  layoutManager=
+                new LinearLayoutManager(getApplicationContext(),
+                        LinearLayoutManager.VERTICAL, false);
+        activityTweetsBinding.tweetRv.setLayoutManager(layoutManager);
+
+        DividerItemDecoration
+                dividerItemDecoration = new DividerItemDecoration(
+                        activityTweetsBinding.tweetRv.getContext(), layoutManager.getOrientation());
+        activityTweetsBinding.tweetRv.addItemDecoration(dividerItemDecoration);
         Intent intent = getIntent();
         if(intent.hasExtra("followerResponse")) {
             followerResponse = intent.getParcelableExtra("followerResponse");
