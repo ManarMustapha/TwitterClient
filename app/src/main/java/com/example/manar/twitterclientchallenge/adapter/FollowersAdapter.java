@@ -5,11 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+
 import com.example.manar.twitterclientchallenge.R;
 import com.example.manar.twitterclientchallenge.databinding.FollowersItemBinding;
-import com.example.manar.twitterclientchallenge.model.Followers;
 import com.example.manar.twitterclientchallenge.model.UserLookUp;
-import com.example.manar.twitterclientchallenge.viewmodel.FollowersInfo;
+import com.example.manar.twitterclientchallenge.viewmodel.FollowersItem;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
     @Override
     public void onBindViewHolder(FollowersViewHolder holder, int position) {
 
-        holder.setFollowers(new FollowersInfo(followersResponseList.get(position)));
+        holder.setFollowers(new FollowersItem(followersResponseList.get(position)));
     }
 
     @Override
@@ -51,8 +51,8 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
             super(followersItemBinding.getRoot());
             this.followersItemBinding = followersItemBinding;
         }
-        void setFollowers(FollowersInfo followersInfo){
-            followersItemBinding.setFollowers(followersInfo);
+        void setFollowers(FollowersItem followersItem){
+            followersItemBinding.setFollowers(followersItem);
         }
     }
 }

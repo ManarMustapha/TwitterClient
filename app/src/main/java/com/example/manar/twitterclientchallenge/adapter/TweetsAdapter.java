@@ -9,7 +9,7 @@ import com.example.manar.twitterclientchallenge.R;
 import com.example.manar.twitterclientchallenge.databinding.TweetItemBinding;
 import com.example.manar.twitterclientchallenge.model.Tweet;
 import com.example.manar.twitterclientchallenge.model.UserLookUp;
-import com.example.manar.twitterclientchallenge.viewmodel.TweetInfo;
+import com.example.manar.twitterclientchallenge.viewmodel.TweetItem;
 
 import java.util.List;
 
@@ -23,6 +23,11 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetsView
     private UserLookUp followers;
 
     public TweetsAdapter(List<Tweet> tweetList , UserLookUp followers) {
+        this.tweetList = tweetList;
+        this.followers = followers;
+    }
+
+    public void setData(List<Tweet> tweetList ) {
         this.tweetList = tweetList;
         this.followers = followers;
     }
@@ -55,7 +60,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetsView
         }
 
         void setTweets(Tweet tweet , UserLookUp followers) {
-            tweetItemBinding.setTweet(new TweetInfo(tweet , followers));
+            tweetItemBinding.setTweet(new TweetItem(tweet , followers));
         }
     }
 }

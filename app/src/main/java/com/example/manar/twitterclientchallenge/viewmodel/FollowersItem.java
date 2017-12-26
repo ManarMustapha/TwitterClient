@@ -13,7 +13,7 @@ import com.example.manar.twitterclientchallenge.view.TweetsActivity;
  * Created by manar on 23/12/17.
  */
 
-public class FollowersInfo extends BaseObservable {
+public class FollowersItem extends BaseObservable {
 
     public ObservableField<String> followerImage = new ObservableField<>("");
     public ObservableField<String> followerName = new ObservableField<>("");
@@ -21,7 +21,7 @@ public class FollowersInfo extends BaseObservable {
     public ObservableBoolean description = new ObservableBoolean(true);
     private UserLookUp followersResponse;
 
-    public FollowersInfo(UserLookUp followersResponse) {
+    public FollowersItem(UserLookUp followersResponse) {
         this.followersResponse = followersResponse;
         followerImage.set(followersResponse.getProfileImageUrl());
         followerName.set(followersResponse.getName());

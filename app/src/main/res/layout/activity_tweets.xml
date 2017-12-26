@@ -1,14 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    tools:context="com.example.manar.twitterclientchallenge.view.TweetsActivity">
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/tweet_rv"
+    <data>
+
+        <variable
+            name="tweetInfo"
+            type="com.example.manar.twitterclientchallenge.viewmodel.TweetInfo" />
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        tools:context="com.example.manar.twitterclientchallenge.view.TweetsActivity">
 
-</android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/cover"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:imageUrl="@{tweetInfo.cover}"
+            android:scaleType="fitXY"
+            android:src="@drawable/twitter_icon_download_18"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <ImageView
+            android:id="@+id/profile_picture"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:circleImageUrl="@{tweetInfo.profilePicture}"
+            android:src="@drawable/twitter_icon_download_18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline2"
+            tools:ignore="RtlCompat" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tweet_rv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:adapterList="@{tweetInfo.tweetObservableArrayList}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
