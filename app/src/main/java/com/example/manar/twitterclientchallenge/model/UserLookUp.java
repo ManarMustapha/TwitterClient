@@ -1,5 +1,8 @@
 package com.example.manar.twitterclientchallenge.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +13,8 @@ import java.util.List;
  * "See the good."
  */
 
-public class UserLookUp {
+public class UserLookUp implements Parcelable {
+
     @SerializedName("id")
     @Expose
     private String id;
@@ -140,6 +144,72 @@ public class UserLookUp {
     @SerializedName("translator_type")
     @Expose
     private String translatorType;
+
+    protected UserLookUp(Parcel in) {
+        id = in.readString();
+        idStr = in.readString();
+        name = in.readString();
+        screenName = in.readString();
+        location = in.readString();
+        description = in.readString();
+        url = in.readString();
+        createdAt = in.readString();
+        timeZone = in.readString();
+        lang = in.readString();
+        profileBackgroundColor = in.readString();
+        profileBackgroundImageUrl = in.readString();
+        profileBackgroundImageUrlHttps = in.readString();
+        profileImageUrl = in.readString();
+        profileImageUrlHttps = in.readString();
+        profileBannerUrl = in.readString();
+        profileLinkColor = in.readString();
+        profileSidebarBorderColor = in.readString();
+        profileSidebarFillColor = in.readString();
+        profileTextColor = in.readString();
+        translatorType = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(idStr);
+        dest.writeString(name);
+        dest.writeString(screenName);
+        dest.writeString(location);
+        dest.writeString(description);
+        dest.writeString(url);
+        dest.writeString(createdAt);
+        dest.writeString(timeZone);
+        dest.writeString(lang);
+        dest.writeString(profileBackgroundColor);
+        dest.writeString(profileBackgroundImageUrl);
+        dest.writeString(profileBackgroundImageUrlHttps);
+        dest.writeString(profileImageUrl);
+        dest.writeString(profileImageUrlHttps);
+        dest.writeString(profileBannerUrl);
+        dest.writeString(profileLinkColor);
+        dest.writeString(profileSidebarBorderColor);
+        dest.writeString(profileSidebarFillColor);
+        dest.writeString(profileTextColor);
+        dest.writeString(translatorType);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<UserLookUp> CREATOR = new Creator<UserLookUp>() {
+        @Override
+        public UserLookUp createFromParcel(Parcel in) {
+            return new UserLookUp(in);
+        }
+
+        @Override
+        public UserLookUp[] newArray(int size) {
+            return new UserLookUp[size];
+        }
+    };
 
     public String getId() {
         return id;

@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">TwitterClientChallenge</string>
     <string name="authentication_failed">Authentication failed</string>
+    <string name="login">Login</string>
+    <string name="followers">Followers</string>
+    <string name="tweets">Tweets</string>
 </resources>

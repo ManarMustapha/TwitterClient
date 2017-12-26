@@ -35,7 +35,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
     @Override
     public void onBindViewHolder(FollowersViewHolder holder, int position) {
 
-        holder.followersItemBinding.setFollowers(new FollowersInfo(followersResponseList.get(position)));
+        holder.setFollowers(new FollowersInfo(followersResponseList.get(position)));
     }
 
     @Override
@@ -44,11 +44,15 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
     }
 
     class FollowersViewHolder extends RecyclerView.ViewHolder {
+
         FollowersItemBinding followersItemBinding;
 
         FollowersViewHolder(FollowersItemBinding followersItemBinding) {
             super(followersItemBinding.getRoot());
             this.followersItemBinding = followersItemBinding;
+        }
+        void setFollowers(FollowersInfo followersInfo){
+            followersItemBinding.setFollowers(followersInfo);
         }
     }
 }

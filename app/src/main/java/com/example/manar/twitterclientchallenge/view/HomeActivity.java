@@ -29,12 +29,19 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        setTitle(getString(R.string.followers));
         followersrv = findViewById(R.id.followers_rv);
         followersrv.setHasFixedSize(true);
-        followersrv.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-        final TwitterSession twitterSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        followersrv.setLayoutManager(
+                new LinearLayoutManager(getApplicationContext(),
+                        LinearLayoutManager.VERTICAL, false));
+        final TwitterSession
+                twitterSession = TwitterCore.getInstance().
+                getSessionManager().
+                getActiveSession();
         final ApiClient myTwitterApiClient = new ApiClient(twitterSession);
-        myTwitterApiClient.getCustomTwitterService().
+        myTwitterApiClient.
+                getCustomTwitterService().
                 getFollowersIds(twitterSession.getUserId())
                 .enqueue(new Callback<FollowersIds>() {
                     @Override
@@ -52,14 +59,12 @@ public class HomeActivity extends AppCompatActivity {
                                     .enqueue(new Callback<List<UserLookUp>>() {
                                         @Override
                                         public void onResponse(Call<List<UserLookUp>> call, Response<List<UserLookUp>> response) {
-                                            Log.v("response", response.body().size() + "");
-                                            followersAdapter = new FollowersAdapter(response.body());
+                                            followersAdapter = new FollowersAdapter(response.body() );
                                             followersrv.setAdapter(followersAdapter);
                                         }
-
                                         @Override
                                         public void onFailure(Call<List<UserLookUp>> call, Throwable t) {
-                                            Log.v("response", t.getMessage());
+
                                         }
                                     });
                         }
@@ -67,11 +72,10 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<FollowersIds> call, Throwable t) {
-                        Log.v("response", t.getMessage());
+
                     }
                 });
     }
-
 
     public String join(String SEPARATOR, List<String> list) {
         StringBuilder csvBuilder = new StringBuilder();
@@ -82,4 +86,3 @@ public class HomeActivity extends AppCompatActivity {
         return csvBuilder.toString();
     }
 }
-
