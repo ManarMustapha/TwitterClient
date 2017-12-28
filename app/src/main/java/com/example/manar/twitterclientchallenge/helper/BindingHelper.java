@@ -32,12 +32,4 @@ public class BindingHelper {
                 .into(view);
     }
 
-    @SuppressWarnings("unchecked")
-    @BindingAdapter("app:adapterList")
-    public static void setData(RecyclerView recyclerView, List<Tweet> tweets ) {
-        TweetsAdapter adapter = (TweetsAdapter) recyclerView.getAdapter();
-        if (adapter != null) {
-            adapter.setData(tweets);
-        }
-    }
 }

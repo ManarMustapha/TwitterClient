@@ -57,7 +57,7 @@ public class TweetsActivity extends AppCompatActivity {
         ApiClient myTwitterApiClient = new ApiClient(twitterSession);
         activityTweetsBinding.progressBar.setVisibility(View.VISIBLE);
         dataSource = TweetsDataSource.getInstance(myTwitterApiClient);
-        dataSource.getTweets(String.valueOf(twitterSession.getUserId()), new LoadTweetsCallback.onTweetsLoaded() {
+        dataSource.getTweets(followerResponse.getId(), new LoadTweetsCallback.onTweetsLoaded() {
             @Override
             public void onLoaded(List<Tweet> tweets) {
                 tweetsAdapter = new TweetsAdapter(tweets, followerResponse);

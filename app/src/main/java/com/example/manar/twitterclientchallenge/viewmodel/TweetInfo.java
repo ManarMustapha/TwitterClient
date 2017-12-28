@@ -13,14 +13,14 @@ import com.example.manar.twitterclientchallenge.model.UserLookUp;
 
 public class TweetInfo extends BaseObservable {
 
-    public ObservableArrayList<Tweet> tweetObservableArrayList = new ObservableArrayList<>();
     public ObservableField<String> profilePicture = new ObservableField<>("");
     public ObservableField<String> cover = new ObservableField<>("");
-    private UserLookUp userLookUp;
 
-    public TweetInfo(UserLookUp userLookUp){
-        this.userLookUp = userLookUp;
+    public TweetInfo(UserLookUp userLookUp) {
         profilePicture.set(userLookUp.getProfileImageUrl());
-        cover.set(userLookUp.getProfileBannerUrl());
+        if (userLookUp.getProfileBannerUrl() == null)
+            cover.set("http://www.iowgeekblog.co.uk/wp-content/uploads/twitter-500x218.jpg");
+        else
+            cover.set(userLookUp.getProfileBannerUrl());
     }
 }
