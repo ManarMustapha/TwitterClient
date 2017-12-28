@@ -1,38 +1,41 @@
 package com.example.manar.twitterclientchallenge.view;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.ProgressBar;
 
+import com.example.manar.twitterclientchallenge.EndlessRecyclerOnScrollListener;
+import com.example.manar.twitterclientchallenge.repositry.FollowersDataSource;
+import com.example.manar.twitterclientchallenge.Injection;
+import com.example.manar.twitterclientchallenge.repositry.LoadFollowersCallback;
 import com.example.manar.twitterclientchallenge.R;
+
+
 import com.example.manar.twitterclientchallenge.adapter.FollowersAdapter;
 import com.example.manar.twitterclientchallenge.client.ApiClient;
-import com.example.manar.twitterclientchallenge.client.OfflineResponseCacheInterceptor;
-import com.example.manar.twitterclientchallenge.client.ResponseCacheInterceptor;
-import com.example.manar.twitterclientchallenge.model.FollowersIds;
 import com.example.manar.twitterclientchallenge.model.UserLookUp;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Cache;
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements LoadFollowersCallback.onFollowersLoaded{
 
     RecyclerView followersrv;
     FollowersAdapter followersAdapter;
-
+    int currentPage =0;
+    List<String> ids;
+    ApiClient myTwitterApiClient;
+    List<UserLookUp> userLookUps = new ArrayList<>();
+    FollowersDataSource dataSource;
+    TwitterSession twitterSession;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +43,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         setTitle(getString(R.string.followers));
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(new OfflineResponseCacheInterceptor())
-                .addNetworkInterceptor(new ResponseCacheInterceptor())
-                // Set the cache location and size (5 MB)
-                .cache(new Cache(new File(getCacheDir(), "apiResponses"), 5 * 1024 * 1024)).build();
-
-
         followersrv = findViewById(R.id.followers_rv);
+        progressBar = findViewById(R.id.progress_bar);
         followersrv.setHasFixedSize(true);
         GridLayoutManager layoutManager =
                 new GridLayoutManager(getApplicationContext(), numberOfColumns());
@@ -56,48 +53,41 @@ public class HomeActivity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(followersrv.getContext(),
                 layoutManager.getOrientation());
         followersrv.addItemDecoration(dividerItemDecoration);
-        final TwitterSession
-                twitterSession = TwitterCore.getInstance().
+        followersAdapter = new FollowersAdapter();
+        followersrv.setAdapter(followersAdapter);
+        addOnScrollListener();
+        twitterSession = TwitterCore.getInstance().
                 getSessionManager().
                 getActiveSession();
-        final ApiClient myTwitterApiClient = new ApiClient(twitterSession, okHttpClient);
-        myTwitterApiClient.
-                getCustomTwitterService().
-                getFollowersIds(twitterSession.getUserId())
-                .enqueue(new Callback<FollowersIds>() {
-                    @Override
-                    public void onResponse(Call<FollowersIds> call, Response<FollowersIds> response) {
-                        if (response.body().getIds().size() > 0) {
-                            List<String> idList;
-                            if (response.body().getIds().size() > 99) {
-                                idList = response.body().getIds().subList(0, 99);
-                            } else {
-                                idList = response.body().getIds();
-                            }
-                            String ids = join(",", idList);
-                            if (ids != null) {
-                                myTwitterApiClient.getCustomTwitterService().getFollowers(ids)
-                                        .enqueue(new Callback<List<UserLookUp>>() {
-                                            @Override
-                                            public void onResponse(Call<List<UserLookUp>> call, Response<List<UserLookUp>> response) {
-                                                followersAdapter = new FollowersAdapter(response.body());
-                                                followersrv.setAdapter(followersAdapter);
-                                            }
+        myTwitterApiClient = new ApiClient(twitterSession, Injection.OkHttp(getApplicationContext()));
+        dataSource = FollowersDataSource.getInstance(myTwitterApiClient);
+        progressBar.setVisibility(View.VISIBLE);
+        dataSource.getFollowersId(twitterSession.getUserId(), new LoadFollowersCallback.onIdsLoaded() {
+            @Override
+            public void onFollowersIdsLoaded(List<String> idsList) {
+                ids = idsList;
+                getFollowers();
+            }
 
-                                            @Override
-                                            public void onFailure(Call<List<UserLookUp>> call, Throwable t) {
+            @Override
+            public void onNoData() {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+    }
 
-                                            }
-                                        });
-                            }
-                        }
-                    }
+    private void getFollowers(){
+        if(ids.size()>100*currentPage){
+            progressBar.setVisibility(View.VISIBLE);
+            if(ids.size()>100+100*currentPage){
+                dataSource.getFollowers(join(",",ids.subList(100*currentPage,99+100*currentPage)),this);
+            }else{
+                dataSource.getFollowers(join(",",ids.subList(100*currentPage,ids.size())),this);
+            }
+            currentPage ++;
 
-                    @Override
-                    public void onFailure(Call<FollowersIds> call, Throwable t) {
+        }
 
-                    }
-                });
     }
 
     public String join(String SEPARATOR, List<String> list) {
@@ -109,16 +99,15 @@ public class HomeActivity extends AppCompatActivity {
         return csvBuilder.toString();
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+    private void addOnScrollListener(){
+        followersrv.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+//                Toast.makeText(getContext(), "Load More" + super.toString(), Toast.LENGTH_SHORT).show();
+                getFollowers();
 
-        // Checks the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-        }
+            }
+        });
     }
 
     private int numberOfColumns() {
@@ -130,5 +119,17 @@ public class HomeActivity extends AppCompatActivity {
         int nColumns = width / widthDivider;
         if (nColumns < 2) return 1;
         return nColumns;
+    }
+
+    @Override
+    public void onLoaded(List<UserLookUp> followers) {
+        userLookUps.addAll(followers);
+        followersAdapter.updateItems(userLookUps);
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onNoData() {
+        progressBar.setVisibility(View.GONE);
     }
 }
