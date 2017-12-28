@@ -37,7 +37,11 @@ public class TweetsDataSource {
                     @Override
                     public void onResponse(Call<List<Tweet>> call, Response<List<Tweet>> response) {
                         if (response.body() != null) {
-                            tweetsCallback.onLoaded(response.body());
+                            if(response.body().size() > 0) {
+                                tweetsCallback.onLoaded(response.body());
+                            }else{
+                                tweetsCallback.onNoData();
+                            }
                         } else {
                             tweetsCallback.onNoData();
                         }
